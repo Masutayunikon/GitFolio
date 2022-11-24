@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <button @click="accept">Click to accept the connection</button>
   </div>
 </template>
 
@@ -15,13 +14,18 @@ const accept = () => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      body: JSON.stringify(route.query),
     },
+    body: JSON.stringify(route.query),
 
   }).then((res) => {
     console.log(res);
+    window.close();
   });
 }
+
+onMounted(() => {
+  accept();
+})
 
 </script>
 

@@ -6,11 +6,34 @@
 
 <script setup lang="ts">
 
+const test = () => {
+  $fetch("/api/github/repos", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      id: 71890754,
+    }),
+  }).then((res) => {
+    console.log(res);
+  });
+}
+
 const github_oauth_popup = () => {
   // open popup
-  const data = $fetch("/api/github/url").then((res) => {
+  $fetch("/api/github/url").then((res) => {
     console.log(res);
-    window.open(res.data.url, "Github", "width=600,height=600");
+    const handle : any = window.open(res.data.url, "Github", "width=600,height=600");
+
+    // check if popup is closed
+    const timer = setInterval(() => {
+      if (handle.closed) {
+        clearInterval(timer);
+        test();
+      }
+    }, 1000);
+
   });
 }
 

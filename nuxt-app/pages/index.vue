@@ -1,14 +1,12 @@
 <template>
   <div>
-    <button @click="test">test</button>
+    <button @click="github_oauth_popup">test</button>
   </div>
 </template>
 
 <script setup lang="ts">
 
-import querystring from 'querystring';
-
-const test = () => {
+const github_oauth_popup = () => {
   // open popup
   const data = $fetch("/api/github/url").then((res) => {
     console.log(res);

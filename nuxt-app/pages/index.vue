@@ -1,6 +1,7 @@
 <template>
   <div>
-    <button @click="github_oauth_popup">test</button>
+    <button @click="github_oauth_popup">oauth2</button>
+    <button @click="test()">test</button>
   </div>
 </template>
 
@@ -30,7 +31,6 @@ const github_oauth_popup = () => {
     const timer = setInterval(() => {
       if (handle.closed) {
         clearInterval(timer);
-        test();
       }
     }, 1000);
 

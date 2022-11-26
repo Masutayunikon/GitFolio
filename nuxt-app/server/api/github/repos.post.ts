@@ -19,8 +19,6 @@ export default defineEventHandler(async (event) => {
         direction: "desc",
     });
 
-    console.log(reqData);
-
     for (const repo of reqData.data) {
         const defaultConfig : any = {
             "display": true,

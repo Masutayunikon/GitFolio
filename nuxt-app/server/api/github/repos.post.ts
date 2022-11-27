@@ -23,9 +23,7 @@ export default defineEventHandler(async (event) => {
         const defaultConfig : any = {
             "display": true,
         };
-        if (await githubRepo.has(repo.id.toString())) {
-            await githubRepo.set(repo.id.toString(), defaultConfig);
-        } else {
+        if (!await githubRepo.has(repo.id.toString())) {
             await githubRepo.add(repo.id.toString(), defaultConfig);
         }
     }

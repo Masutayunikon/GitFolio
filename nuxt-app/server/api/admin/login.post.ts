@@ -18,12 +18,22 @@ export default defineEventHandler(async (event) => {
 
     const token = db.table("adminTokens");
 
-    console.log(body, process.env.ADMIN_PASSWORD, process.env.ADMIN_USERNAME);
     if (body.username === process.env.ADMIN_USERNAME && body.password === process.env.ADMIN_PASSWORD) {
 
         const tokenString = randomBytes(64).toString("hex");
 
         await token.set(tokenString, {expires: new Date().getTime() + 1000 * 60 * 60 * 8});
+
+        /**
+         * delete all tokens that are expired
+         */
+        const tokens = await token.all();
+
+        for (const cookie of tokens) {
+            if (cookie.value.expires < new Date().getTime()) {
+                await token.delete(cookie.id);
+            }
+        }
 
         event.node.res.setHeader("Set-Cookie", `access_token:${tokenString}; path=/; max-age=28800;`);
 
@@ -34,5 +44,8 @@ export default defineEventHandler(async (event) => {
     }
     return {
         success: false,
+        data: {
+            error: "Invalid username or password"
+        }
     }
 });

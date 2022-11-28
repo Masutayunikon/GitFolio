@@ -40,7 +40,7 @@ export default defineEventHandler(async (event) => {
         } else {
             await github.add(id, data);
         }
-        console.log(await github.all());
+
         return {
             success: true,
         };

@@ -2,5 +2,6 @@
 export default defineNuxtConfig({
     css: [
         '~/assets/reset.css',
+        '~/assets/color.css',
     ]
 })

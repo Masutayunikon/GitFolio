@@ -12,9 +12,6 @@ export async function githubApiCallHandler (url: string, userId: string, method:
     // @ts-ignore
     const userDbData: object = await github.get(userId);
 
-    // @ts-ignore
-    console.log("USERDB", userDbData.access_token);
-
     const req = await fetch(url + (query ? querystring.stringify(query) : ''), {
         method: method,
         headers: {

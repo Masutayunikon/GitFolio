@@ -5,6 +5,7 @@
       <h6>You are not an admin ? <nuxt-link to="/">Back to home</nuxt-link></h6>
       <input placeholder="username" type="text" v-model="username">
       <input placeholder="password" type="password" v-model="password">
+      <span>{{ error }}</span>
       <button @click="login()">Login</button>
     </div>
   </div>
@@ -12,21 +13,26 @@
 
 <script setup lang="ts">
 
+let error = ref("");
 let username = ref("");
 let password = ref("");
 
 const login = () => {
-  console.log('login')
   $fetch('/api/admin/login', {
     method: 'POST',
     body: JSON.stringify({
-      username: 'admin',
-      password: 'admin'
+      username: username.value,
+      password: password.value
     })
   }).then((res) => {
     const router = useRouter()
     if (res.success) {
       router.push('/admin/dashboard')
+    } else {
+      error.value = <string>res.data?.error
+      setTimeout(() => {
+        error.value = ""
+      }, 3000)
     }
   })
 }
@@ -40,7 +46,9 @@ const login = () => {
   align-items: center;
   height: 100vh;
   width: 100vw;
+  background-color: #009eff;
   .container__login {
+    background-color: orange;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -64,6 +72,7 @@ const login = () => {
 
     input {
       width: 80%;
+      background-color: #fdf9d3;
       margin: 15px 0;
       height: 30px;
       font-size: 1.2rem;
@@ -75,10 +84,12 @@ const login = () => {
       border-bottom: 2px solid #535353;
       &:focus {
         border: 2px solid #535353;
+        outline: none;
       }
     }
 
     button {
+      background-color: #fdf9d3;
       width: 60%;
       height: 30px;
       font-size: 1.2rem;
@@ -87,13 +98,17 @@ const login = () => {
       margin-bottom: 10%;
       &:hover {
         cursor: pointer;
-        background-color: #cecece;
+        background-color: #f6c866;
       }
 
       &:active {
-        background-color: #929292;
+        background-color: #faa91a;
       }
 
+    }
+
+    span {
+      color: red;
     }
 
   }

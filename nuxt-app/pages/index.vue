@@ -24,7 +24,6 @@ const test = () => {
 const github_oauth_popup = () => {
   // open popup
   $fetch("/api/github/url").then((res) => {
-    console.log(res);
     const handle : any = window.open(res.data.url, "Github", "width=600,height=600");
 
     // check if popup is closed

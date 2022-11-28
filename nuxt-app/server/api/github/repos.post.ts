@@ -10,8 +10,6 @@ export default defineEventHandler(async (event) => {
 
     const body = await readBody(event);
 
-    console.log(body);
-
     const reqData = await githubApiCallHandler("https://api.github.com/user/repos?", body.id.toString(), "GET", null, {
         visibility: "all",
         affiliation: "owner,collaborator,organization_member",
@@ -27,8 +25,6 @@ export default defineEventHandler(async (event) => {
             await githubRepo.add(repo.id.toString(), defaultConfig);
         }
     }
-
-    console.log(await githubRepo.all());
 
     return {
         success: true,

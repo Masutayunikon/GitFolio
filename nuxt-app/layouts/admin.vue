@@ -85,7 +85,7 @@ const close_navbar = () => {
         font-weight: 500;
         text-decoration: none;
         &:hover {
-          background-color: rgba(0, 158, 255, 0.5);
+          background-color: rgba(255, 165, 0, 0.75);
         }
 
         &.router-link-exact-active {
@@ -102,7 +102,7 @@ const close_navbar = () => {
     position: sticky;
     width: 100%;
     height: 50px;
-    background-color: var(--color-secondary);
+    background-color: var(--color-primary);
     display: flex;
     justify-content: center;
     align-items: center;

@@ -16,7 +16,7 @@ definePageMeta({
 .container {
   width: 100%;
   min-height: calc(100vh - 50px);
-  background-color: var(--color-primary);
+  background-color: var(--color-secondary);
 }
 
 </style>

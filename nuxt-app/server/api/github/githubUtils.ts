@@ -43,6 +43,7 @@ export async function githubApiCallHandler (url: string, userId: string, method:
         if (refresh.status === 200) {
             // @ts-ignore
             await github.set(userId, refreshData);
+            console.log("refreshed token");
             // @ts-ignore
             return githubApiCallHandler(url, userId, method, body, query);
         }

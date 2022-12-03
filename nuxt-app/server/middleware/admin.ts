@@ -10,9 +10,15 @@ export default defineEventHandler(async (event) => {
 
     const authorizedRoutes = [
         "/admin/login",
+        "/api/admin/display",
+        "/api/admin/login",
+        "/api/github/login",
+        "/api/github/callback",
+        "/api/github/url",
+        "/api/github/repos",
     ]
 
-    const clientSideRoutes = event.node.req.url?.startsWith("/admin");
+    const clientSideRoutes = event.node.req.url?.startsWith("/admin") || event.node.req.url?.startsWith("/api");
     // check if url is in authorized routes
     if (clientSideRoutes && !authorizedRoutes.includes(<string>event.node.req.url)) {
         const cookie = event.node.req.headers.cookie?.split(";").map((cookie) => cookie.trim()).find((cookie) => cookie.startsWith("access_token"))?.split(":")[1];

@@ -3,5 +3,7 @@ export default defineNuxtConfig({
     css: [
         '~/assets/reset.css',
         '~/assets/color.css',
-    ]
+    ],
+    components: true,
+    ssr: true,
 })

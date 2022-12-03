@@ -1,5 +1,4 @@
 {
-  "private": true,
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
@@ -8,7 +7,7 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
-    "nuxt": "3.0.0"
+    "nuxt": "npm:nuxt3@latest"
   },
   "dependencies": {
     "better-sqlite3": "^7.6.2",

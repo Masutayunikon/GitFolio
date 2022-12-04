@@ -62,7 +62,8 @@ const deleteAccount = async (id: string) => {
       id: id,
     }),
   }).then((res) => {
-    console.log(res);
+    // find in accounts
+
   });
 }
 
@@ -92,7 +93,8 @@ const getAccounts = async () => {
   align-items: center;
   justify-content: center;
   .accounts_container {
-    min-width: 750px;
+    max-width: 750px;
+    width: 100%;
     min-height: 60vh;
     background-color: var(--color-primary);
     border-radius: 30px;

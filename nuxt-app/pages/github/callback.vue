@@ -9,7 +9,6 @@ import { useRouter } from "vue-router";
 const route = useRoute();
 
 const accept = () => {
-  console.log(route.query);
   $fetch("/api/github/callback", {
     method: "POST",
     headers: {
@@ -18,7 +17,6 @@ const accept = () => {
     body: JSON.stringify(route.query),
 
   }).then((res) => {
-    console.log(res);
     window.close();
   });
 }

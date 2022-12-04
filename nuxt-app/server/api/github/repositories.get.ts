@@ -15,7 +15,6 @@ export default defineEventHandler(async (event) => {
     const res = [];
 
     for (const token of tokens) {
-        console.log(token);
         const reqData = await githubApiCallHandler("https://api.github.com/user/repos?", token.id, "GET", null, {
             visibility: "all",
             affiliation: "owner,collaborator,organization_member",

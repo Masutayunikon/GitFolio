@@ -8,12 +8,8 @@ export default defineEventHandler(async (event) => {
     if (body.display === true || body.display === false) {
         const config: any = await githubRepo.get(body.id.toString());
         if (config) {
-            console.log(config);
             if (config.display !== body.display) {
-                console.log("changed");
-                await githubRepo.set(body.id.toString(), {
-                    display: body.display,
-                });
+                await githubRepo.set(body.id.toString() + ".display", body.display);
             }
 
             const newConfig: any = await githubRepo.get(body.id.toString());

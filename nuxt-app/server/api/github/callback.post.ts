@@ -31,15 +31,15 @@ export default defineEventHandler(async (event) => {
 
     const userData = await user.json();
 
-    if (user.status === 200) {
+    console.log(data);
+
+    if (user.status === 200 && data.access_token) {
         data["created_time"] = new Date().getTime();
         const id = userData.id.toString();
 
-        if (await github.has(id)) {
-            await github.set(id, data);
-        } else {
-            await github.add(id, data);
-        }
+        console.log(id, data);
+
+        await github.set(id, data);
 
         return {
             success: true,

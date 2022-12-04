@@ -40,9 +40,10 @@ const createAccount = async () => {
     const handle : any = window.open(res.data.url, "Github", "width=600,height=600");
 
     // check if popup is closed
-    const timer = setInterval(() => {
+    const timer = setInterval(async () => {
       if (handle.closed) {
         clearInterval(timer);
+        await getAccounts()
       }
     }, 1000);
 
@@ -91,7 +92,7 @@ const getAccounts = async () => {
   align-items: center;
   justify-content: center;
   .accounts_container {
-    min-width: 80%;
+    min-width: 750px;
     min-height: 60vh;
     background-color: var(--color-primary);
     border-radius: 30px;

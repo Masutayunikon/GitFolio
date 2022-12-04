@@ -25,10 +25,11 @@ export default defineEventHandler(async (event) => {
 
         for (const repo of reqData.data) {
             const defaultConfig : any = {
-                "display": true,
+                "display": false,
+                "token": token.id,
             };
             if (!await githubRepo.has(repo.id.toString())) {
-                await githubRepo.add(repo.id.toString(), defaultConfig);
+                await githubRepo.set(repo.id.toString(), defaultConfig);
             }
             res.push(repo);
         }

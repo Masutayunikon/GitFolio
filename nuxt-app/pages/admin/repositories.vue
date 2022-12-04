@@ -54,7 +54,6 @@ const updateRepository = async (value: any, id: string) => {
   })
 
   if (req.success) {
-    console.log(req);
     configRepository.id = req.data.config.display
   }
 
@@ -87,7 +86,7 @@ const getRepositories = async () => {
   align-items: center;
   justify-content: center;
   .repositories_container {
-    min-width: 80%;
+    min-width: 750px;
     background-color: var(--color-primary);
     border-radius: 30px;
     box-shadow: 12px 12px 2px 1px #535353;

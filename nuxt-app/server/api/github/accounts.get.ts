@@ -3,6 +3,7 @@ import {githubApiCallHandler} from "~/server/api/github/githubUtils";
 
 const db = new QuickDB();
 const github = db.table("githubTokens");
+const githubRepo = db.table("githubRepos");
 
 export default defineEventHandler(async (event) => {
     let accounts = [];

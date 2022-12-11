@@ -86,6 +86,8 @@ const getRepositories = async () => {
   align-items: center;
   justify-content: center;
   .repositories_container {
+    margin-top: 50px;
+    margin-bottom: 50px;
     max-width: 750px;
     width: 100%;
     background-color: var(--color-primary);

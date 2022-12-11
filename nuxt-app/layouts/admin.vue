@@ -51,7 +51,7 @@ const close_navbar = () => {
     width: 60%;
     max-width: 400px;
     height: 100vh;
-    background-color: rgba(0, 158, 255, 0.85);
+    background-color: var(--color-primary);
     z-index: 1;
     .navbar__top {
       display: flex;
@@ -85,11 +85,11 @@ const close_navbar = () => {
         font-weight: 500;
         text-decoration: none;
         &:hover {
-          background-color: rgba(255, 165, 0, 0.75);
+          background-color: var(--color-secondary);
         }
 
         &.router-link-exact-active {
-          background-color: var(--color-primary);
+          background-color: var(--color-quaternary);
           color: black;
         }
 

@@ -112,17 +112,17 @@ const getAccounts = async () => {
         width: 50px;
         height: 50px;
         border: none;
-        background-color: limegreen;
+        background-color: var(--color-tertiary);
         display: flex;
         align-items: center;
         justify-content: center;
         &:hover {
-          background-color: green;
+          background-color: var(--color-quaternary);
         }
         svg {
           width: 30px;
           height: 30px;
-          fill: black;
+          fill: var(--color-secondary);
         }
       }
     }

@@ -9,7 +9,6 @@ const github = db.table("githubTokens");
 
 export default defineEventHandler(async (event) => {
 
-    // get github users id from db
     const tokens = await github.all();
 
     const res = [];
@@ -24,6 +23,8 @@ export default defineEventHandler(async (event) => {
 
         for (const repo of reqData.data) {
             const defaultConfig : any = {
+                "owner": repo.owner.login,
+                "name": repo.name,
                 "display": false,
                 "token": token.id,
             };

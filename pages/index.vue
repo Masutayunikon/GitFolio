@@ -1,49 +1,51 @@
 <template>
-  <div class="container">
-    <div class="container__profile">
-      <div class="wrapper_image">
-        <img src="/images/profile.jpg" alt="profile" class="profile__image">
+  <nuxt-layout name="portfolio">
+    <div class="container">
+      <div class="container__profile">
+        <div class="wrapper_image">
+          <img src="/images/profile.jpg" alt="profile" class="profile__image">
+        </div>
+        <div class="profile__description">
+          <span class="name">Qui suis-je?</span>
+          <span class="description">Je suis actuellement en troisième année à Epitech, et mon objectif est de devenir un développeur fullstack. J'ai des compétences en développement web, avec une connaissance des langages de programmation populaires. </span>
+        </div>
       </div>
-      <div class="profile__description">
-        <span class="name">Qui suis-je?</span>
-        <span class="description">Je suis actuellement en troisième année à Epitech, et mon objectif est de devenir un développeur fullstack. J'ai des compétences en développement web, avec une connaissance des langages de programmation populaires. </span>
+      <div class="container__skills">
+        <UnderlineText class="title_skill" text="Compétences" line-color="green" line-height="0.3rem" text-color="white"/>
+        <div class="container__icons">
+          <TextIcon spacing="1rem" name="logos:nuxt-icon" text="NuxtJS" :after="true"/>
+          <TextIcon spacing="1rem" name="vscode-icons:file-type-js-official" text="Javascript" :after="true"/>
+          <TextIcon spacing="1rem" name="vscode-icons:file-type-vue" text="VueJS" :after="true"/>
+          <TextIcon spacing="1rem" name="logos:nodejs" text="NodeJS" :after="true"/>
+          <TextIcon spacing="1rem" name="vscode-icons:file-type-php2" text="PHP" :after="true"/>
+          <TextIcon spacing="1rem" name="vscode-icons:file-type-html" text="HTML5" :after="true"/>
+          <TextIcon spacing="1rem" name="vscode-icons:file-type-css" text="CSS3" :after="true"/>
+          <TextIcon spacing="1rem" name="vscode-icons:file-type-scss2" text="SCSS" :after="true"/>
+          <TextIcon spacing="1rem" name="vscode-icons:file-type-c" text="C" :after="true"/>
+          <TextIcon spacing="1rem" name="vscode-icons:file-type-cpp3" text="C++" :after="true"/>
+          <TextIcon style="fill: white" spacing="1rem" name="logos:github-octocat" text="Github" :after="true"/>
+          <TextIcon spacing="1rem" name="logos:gitlab" text="Gitlab" :after="true"/>
+        </div>
+        <UnderlineText class="title_skill"  line-height="0.3rem" line-color="blue" text="En cours d'apprentissage" text-color="white" />
+        <div class="container__icons">
+          <TextIcon spacing="1rem" name="logos:blender" text="Blender" :after="true"/>
+          <TextIcon spacing="1rem" name="vscode-icons:file-type-typescript-official" text="Typescript" :after="true"/>
+          <TextIcon style="fill: white" spacing="1rem" name="logos:threejs" text="ThreeJS" :after="true"/>
+        </div>
+        <UnderlineText class="title_skill" line-height="0.3rem" line-color="orange" text="Projects" text-color="white" />
+        <div  class="container__icons container__projects">
+          <GithubProject class="project" v-for="project in repositories" :name="project.name" :description="project.description" :language="project.language" :updated_at="project.updated_at" :html_url="project.html_url"/>
+        </div>
+        <UnderlineText line-height="0.3rem" line-color="red" text="Contacts" text-color="white" />
+        <div class="container__icons">
+          <TextIcon name="skill-icons:discord" text="Discord" spacing="1rem" :after="true" :is-link="true" link="https://discordapp.com/users/1074095235803656302"/>
+          <TextIcon style="fill: white" name="icon-park:github" text="Github" spacing="1rem" :after="true" :is-link="true" link="https://github.com/Masutayunikon"/>
+          <TextIcon name="logos:google-gmail" text="Gmail" link="quentinmail974@gmail.com" spacing="1rem" :after="true" :is-link="true" :is-mail="true" />
+          <TextIcon name="vscode-icons:file-type-outlook" text="Outlook" link="quentin.robert@epitech.eu" spacing="1rem" :after="true" :is-link="true" :is-mail="true" />
+        </div>
       </div>
     </div>
-    <div class="container__skills">
-      <UnderlineText class="title_skill" text="Compétences" line-color="green" line-height="0.3rem" text-color="white"/>
-      <div class="container__icons">
-        <TextIcon spacing="1rem" name="logos:nuxt-icon" text="NuxtJS" :after="true"/>
-        <TextIcon spacing="1rem" name="vscode-icons:file-type-js-official" text="Javascript" :after="true"/>
-        <TextIcon spacing="1rem" name="vscode-icons:file-type-vue" text="VueJS" :after="true"/>
-        <TextIcon spacing="1rem" name="logos:nodejs" text="NodeJS" :after="true"/>
-        <TextIcon spacing="1rem" name="vscode-icons:file-type-php2" text="PHP" :after="true"/>
-        <TextIcon spacing="1rem" name="vscode-icons:file-type-html" text="HTML5" :after="true"/>
-        <TextIcon spacing="1rem" name="vscode-icons:file-type-css" text="CSS3" :after="true"/>
-        <TextIcon spacing="1rem" name="vscode-icons:file-type-scss2" text="SCSS" :after="true"/>
-        <TextIcon spacing="1rem" name="vscode-icons:file-type-c" text="C" :after="true"/>
-        <TextIcon spacing="1rem" name="vscode-icons:file-type-cpp3" text="C++" :after="true"/>
-        <TextIcon style="fill: white" spacing="1rem" name="logos:github-octocat" text="Github" :after="true"/>
-        <TextIcon spacing="1rem" name="logos:gitlab" text="Gitlab" :after="true"/>
-      </div>
-      <UnderlineText class="title_skill"  line-height="0.3rem" line-color="blue" text="En cours d'apprentissage" text-color="white" />
-      <div class="container__icons">
-        <TextIcon spacing="1rem" name="logos:blender" text="Blender" :after="true"/>
-        <TextIcon spacing="1rem" name="vscode-icons:file-type-typescript-official" text="Typescript" :after="true"/>
-        <TextIcon style="fill: white" spacing="1rem" name="logos:threejs" text="ThreeJS" :after="true"/>
-      </div>
-      <UnderlineText class="title_skill" line-height="0.3rem" line-color="orange" text="Projects" text-color="white" />
-      <div  class="container__icons container__projects">
-        <GithubProject class="project" v-for="project in repositories" :name="project.name" :description="project.description" :language="project.language" :updated_at="project.updated_at" :html_url="project.html_url"/>
-      </div>
-      <UnderlineText line-height="0.3rem" line-color="red" text="Contacts" text-color="white" />
-      <div class="container__icons">
-        <TextIcon name="skill-icons:discord" text="Discord" spacing="1rem" :after="true" :is-link="true" link="https://discordapp.com/users/1074095235803656302"/>
-        <TextIcon style="fill: white" name="icon-park:github" text="Github" spacing="1rem" :after="true" :is-link="true" link="https://github.com/Masutayunikon"/>
-        <TextIcon name="logos:google-gmail" text="Gmail" link="quentinmail974@gmail.com" spacing="1rem" :after="true" :is-link="true" :is-mail="true" />
-        <TextIcon name="vscode-icons:file-type-outlook" text="Outlook" link="quentin.robert@epitech.eu" spacing="1rem" :after="true" :is-link="true" :is-mail="true" />
-      </div>
-    </div>
-  </div>
+  </nuxt-layout>
 </template>
 
 <script setup lang="ts">
@@ -66,8 +68,6 @@ useHead({
     }
   ],
 })
-
-setPageLayout('portfolio');
 
 const repositories = await fetch('https://api.github.com/users/Masutayunikon/repos', {
   method: 'GET',

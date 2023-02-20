@@ -2,7 +2,6 @@ import {QuickDB} from "quick.db";
 import {defineEventHandler} from "h3";
 import {readBody} from "h3";
 import {randomBytes} from "crypto";
-
 import dotenv from "dotenv";
 
 dotenv.config(
@@ -31,7 +30,6 @@ export default defineEventHandler(async (event) => {
 
         const tokens = await token.all();
 
-        console.log(tokens);
 
         for (const cookie of tokens) {
             if (cookie.value.expires < new Date().getTime()) {

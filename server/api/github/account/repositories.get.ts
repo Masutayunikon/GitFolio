@@ -1,5 +1,4 @@
 import {QuickDB} from "quick.db";
-import * as querystring from "querystring";
 import { getRepositories, refreshToken } from "~/server/github";
 
 const db = new QuickDB();

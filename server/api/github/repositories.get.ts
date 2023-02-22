@@ -4,6 +4,7 @@ import { getRepositories, refreshToken } from "~/server/github";
 
 const db = new QuickDB();
 const github = db.table("github");
+const repositories = db.table("repositories");
 
 export default defineEventHandler(async (event) => {
 
@@ -82,9 +83,27 @@ export default defineEventHandler(async (event) => {
         res = res.concat(repositories);
     }
 
+    type repo = {
+        id: string;
+        repository: {
+            [key: string]: any
+        }
+        display: boolean;
+    }
+
+
+    for (let repository of res) {
+        if (!await repositories.get(repository.id.toString())) {
+            await repositories.set(repository.id.toString(), {
+                repository: repository,
+                display: true
+            });
+        }
+    }
+
     return {
         success: true,
-        repositories: res
+        repositories: await repositories.all()
     }
 
 });

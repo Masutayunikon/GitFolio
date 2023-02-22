@@ -16,7 +16,7 @@
         <div class="account" v-for="account in accounts" :key="account.id">
           <img :src="account.avatar"  alt="avatar"/>
           <span>{{account.username}}</span>
-          <button @click="removeAccount(account.id)" style="background-color: red; margin-left: auto"><Icon name="fa6-solid:trash" /></button>
+          <button @click="removeAccount(account.id)" style="background-color: red;"><Icon name="fa6-solid:trash" /></button>
         </div>
       </div>
     </div>
@@ -24,11 +24,12 @@
       <div class="toolbar">
         <button style="background-color: dodgerblue; font-weight: bold;" @click="getRepositories">Refresh repositories</button>
       </div>
+      <div id="configuration_status" class="status">{{message}}</div>
       <div class="content">
         <h2 class="title">Repositories</h2>
         <div class="repository" v-for="repository in repositories" :key="repository.id">
-          <span>{{repository.name}}</span>
-          <RoundedSwitch :checked="repository.enabled" @change="toggleRepository(repository.id)" />
+          <label>{{repository.value.repository.name}}</label>
+          <input type="checkbox" :checked="repository.value.display" @change="toggleRepository($event, repository.value.repository.id)">
         </div>
       </div>
     </div>
@@ -63,8 +64,24 @@ interface Account {
   avatar: string;
 }
 
-const toggleRepository = (id: string) => {
-  console.log(id);
+const toggleRepository = async (event : Event , id: string) => {
+  const target : HTMLInputElement = event.target as HTMLInputElement;
+  console.log(id, target.value, target.checked);
+
+  const res = await $fetch('/api/admin/github/repository/display', {
+    method: 'PUT',
+    body: JSON.stringify({
+      id,
+      display: target.checked
+    })
+  });
+
+  if (res.success) {
+    success("Repository updated successfully", "configuration_status");
+  } else {
+    error("Repository update failed", "configuration_status");
+  }
+
 };
 
 const success = (successMessage : string, id : string) => {
@@ -213,6 +230,7 @@ const removeAccount = async (id: string) => {
   .page {
     width: 100%;
     .status {
+      display: none;
       width: 100%;
       height: 2rem;
       text-align: center;
@@ -264,14 +282,19 @@ const removeAccount = async (id: string) => {
         text-align: center;
       }
       .repository {
-        width: 100%;
         display: flex;
         align-items: center;
         flex-wrap: wrap;
-        padding: 0.5rem;
-        border-bottom: 1px solid black;
-        font-size: 1.5rem;
+        width: 100%;
+        border: 1px solid black;
+        font-size: 1.8rem;
         justify-content: space-between;
+        label {
+          margin-left: 0.5rem;
+        }
+        input {
+          margin-right: 0.5rem;
+        }
       }
       .account {
         width: 100%;
@@ -281,6 +304,7 @@ const removeAccount = async (id: string) => {
         padding: 0.5rem;
         border-bottom: 1px solid black;
         font-size: 1.5rem;
+        justify-content: space-between;
         img {
           width: 50px;
           height: 50px;

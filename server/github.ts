@@ -85,8 +85,6 @@ export async function getRepositories(access_token: string) {
         }
     });
 
-    console.log(repositories);
-
     return await repositories.json();
 }
 

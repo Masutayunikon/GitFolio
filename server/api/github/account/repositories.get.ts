@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
 
     const repositories = await getRepositories(account.access_token);
 
-    if (repositories.code === 401) {
+    if (repositories.code === 401 || repositories.message === "Bad credentials") {
         await refreshToken(body.id);
         const newAccount: Account | null = await github.get(body.id);
         if (!newAccount) {
@@ -41,10 +41,10 @@ export default defineEventHandler(async (event) => {
         }
         const newRepositories = await getRepositories(newAccount.access_token);
 
-        if (newRepositories.error) {
+        if (newRepositories.error || newRepositories.message) {
             return {
                 success: false,
-                error: newRepositories.error
+                error: newRepositories.error || newRepositories.message
             }
         }
 
@@ -54,10 +54,10 @@ export default defineEventHandler(async (event) => {
         }
     }
 
-    if (repositories.error) {
+    if (repositories.error || repositories.message) {
         return {
             success: false,
-            error: repositories.error
+            error: repositories.error || repositories.message
         }
     }
 

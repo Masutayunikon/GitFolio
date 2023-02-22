@@ -52,7 +52,8 @@ export default defineEventHandler(async (event) => {
 
         const repositories = await getRepositories(account.value.access_token);
 
-        if (repositories.code === 401) {
+        if (repositories.code === 401 || repositories.message === "Bad credentials") {
+            console.log("Refreshing token");
             await refreshToken(account.id);
             const newAccount: Account | null = await github.get(account.id);
             if (!newAccount) {
@@ -73,10 +74,10 @@ export default defineEventHandler(async (event) => {
             res = res.concat(newRepositories);
         }
 
-        if (repositories.error) {
+        if (repositories.error || repositories.message) {
             return {
                 success: false,
-                error: repositories.error
+                error: repositories.error || repositories.message
             }
         }
 
@@ -90,7 +91,6 @@ export default defineEventHandler(async (event) => {
         }
         display: boolean;
     }
-
 
     for (let repository of res) {
         if (!await repositories.get(repository.id.toString())) {

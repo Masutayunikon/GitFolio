@@ -1,43 +1,60 @@
 <template>
   <div class="page__admin">
     <div class="menu">
-      <Icon class="menu__bar" @click="toggleSpan" :name="icon" />
-      <span @click="changeTab('Github')" :style="{backgroundColor: selectedTab === 'Github' ? '#ccc' : ''}">Github</span>
-      <span @click="changeTab('Configuration')" :style="{backgroundColor: selectedTab === 'Configuration' ? '#ccc' : ''}">Configuration</span>
-      <span @click="changeTab('Database')" :style="{backgroundColor: selectedTab === 'Database' ? '#ccc' : ''}">Database</span>
+      <Icon class="menu__bar" @click="toggleSpan" :name="icon"/>
+      <span @click="changeTab('Github')"
+            :style="{backgroundColor: selectedTab === 'Github' ? '#ccc' : ''}">Github</span>
+      <span @click="changeTab('Configuration')"
+            :style="{backgroundColor: selectedTab === 'Configuration' ? '#ccc' : ''}">Configuration</span>
+      <span @click="changeTab('Database')"
+            :style="{backgroundColor: selectedTab === 'Database' ? '#ccc' : ''}">Database</span>
     </div>
     <div class="page" v-if="selectedTab === 'Github'">
       <div class="toolbar">
         <button @click="addAccount" style="background-color: green; font-weight: bold;">Add account</button>
         <button @click="getAccounts" style="background-color: dodgerblue; font-weight: bold;">Refresh accounts</button>
       </div>
-      <div  class="content">
+      <div class="content">
         <h2 class="title">Accounts</h2>
         <div class="account" v-for="account in accounts" :key="account.id">
-          <img :src="account.avatar"  alt="avatar"/>
-          <span>{{account.username}}</span>
-          <button @click="removeAccount(account.id)" style="background-color: red;"><Icon name="fa6-solid:trash" /></button>
+          <img :src="account.avatar" alt="avatar"/>
+          <span>{{ account.username }}</span>
+          <button @click="removeAccount(account.id)" style="background-color: red;">
+            <Icon name="fa6-solid:trash"/>
+          </button>
         </div>
       </div>
     </div>
     <div class="page" v-if="selectedTab === 'Configuration'">
       <div class="toolbar">
-        <button style="background-color: dodgerblue; font-weight: bold;" @click="getRepositories">Refresh repositories</button>
+        <button style="background-color: dodgerblue; font-weight: bold;" @click="getRepositories">Refresh repositories
+        </button>
       </div>
-      <div id="configuration_status" class="status">{{message}}</div>
+      <div id="configuration_status" class="status">{{ message }}</div>
       <div class="content">
         <h2 class="title">Repositories</h2>
         <div class="repository" v-for="repository in repositories" :key="repository.id">
-          <label>{{repository.value.repository.name}}</label>
-          <input type="checkbox" :checked="repository.value.display" @change="toggleRepository($event, repository.value.repository.id)">
+          <label>{{ repository.value.repository.name }}</label>
+          <input type="checkbox" :checked="repository.value.display"
+                 @change="toggleRepository($event, repository.value.repository.id)">
         </div>
+        <h2 class="title">Skills</h2>
+        <div class="skills_container">
+          <div class="skills" v-for="skill in skills" :key="skill.id">
+            <h5>{{ skill.language }}</h5>
+            <div class="skill_icons">
+              <Icon class="skill_icon" v-for="icon in skill.icons" :key="icon.id" :name="icon"/>
+            </div>
+          </div>
+        </div>
+        <button @click="getSkills">Get skills</button>
       </div>
     </div>
     <div class="page" v-if="selectedTab === 'Database'">
       <div class="toolbar">
         <button @click="resetDatabase" style="background-color: red; font-weight: bold;">Reset database</button>
       </div>
-      <div id="database_status" class="status">{{message}}</div>
+      <div id="database_status" class="status">{{ message }}</div>
     </div>
   </div>
 </template>
@@ -56,7 +73,12 @@ const message = ref("");
 
 const accounts = ref<Account[]>([]);
 
-const repositories = ref<AnyObj[]|undefined>([]);
+const repositories = ref<AnyObj[] | undefined>([]);
+
+const skills = ref<{
+  language: string;
+  icons: string[];
+}[] | undefined>(undefined);
 
 interface Account {
   id: string;
@@ -64,8 +86,8 @@ interface Account {
   avatar: string;
 }
 
-const toggleRepository = async (event : Event , id: string) => {
-  const target : HTMLInputElement = event.target as HTMLInputElement;
+const toggleRepository = async (event: Event, id: string) => {
+  const target: HTMLInputElement = event.target as HTMLInputElement;
   console.log(id, target.value, target.checked);
 
   const res = await $fetch('/api/admin/github/repository/display', {
@@ -84,7 +106,7 @@ const toggleRepository = async (event : Event , id: string) => {
 
 };
 
-const success = (successMessage : string, id : string) => {
+const success = (successMessage: string, id: string) => {
   message.value = successMessage;
   const elem = document.getElementById(id);
   if (!elem) return;
@@ -97,7 +119,7 @@ const success = (successMessage : string, id : string) => {
   }, 3000);
 }
 
-const error = (errorMessage : string, id : string) => {
+const error = (errorMessage: string, id: string) => {
   message.value = errorMessage;
   const elem = document.getElementById(id);
   if (!elem) return;
@@ -110,7 +132,7 @@ const error = (errorMessage : string, id : string) => {
   }, 3000);
 }
 
-const loading = (loadingMessage : string, id : string) => {
+const loading = (loadingMessage: string, id: string) => {
   message.value = loadingMessage;
   const elem = document.getElementById(id);
   if (!elem) return;
@@ -182,7 +204,10 @@ const getRepositories = async () => {
   });
 
   if (res.success) {
+    success("Repositories fetched successfully", "configuration_status")
     repositories.value = res.repositories;
+  } else {
+    error("Repositories fetch failed", "configuration_status")
   }
 }
 
@@ -199,6 +224,19 @@ const removeAccount = async (id: string) => {
   }
 }
 
+const getSkills = async () => {
+  const res = await $fetch('/api/skills', {
+    method: 'GET',
+  });
+
+  if (res.success) {
+    skills.value = res.skills;
+    success("Skills fetched successfully", "configuration_status")
+  } else {
+    error("Skills fetch failed", "configuration_status")
+  }
+}
+
 </script>
 
 <style scoped lang="scss">
@@ -208,60 +246,73 @@ const removeAccount = async (id: string) => {
   min-height: 100vh;
   display: flex;
   font-family: 'Poppins', ui-monospace;
+
   .menu {
     .menu__bar {
       display: none;
     }
+
     border-right: 1px solid black;
     display: flex;
     flex-direction: column;
-    width: 20%;
+    width: 100%;
     max-width: 200px;
     font-size: 1.5rem;
+
     span {
       padding: 10px;
       cursor: pointer;
+
       &:hover {
         background-color: #ccc;
       }
+
       border: 1px solid black;
     }
   }
+
   .page {
     width: 100%;
+
     .status {
       display: none;
       width: 100%;
       height: 2rem;
       text-align: center;
       font-size: 1.5rem;
+
       &.success {
         display: block;
         background-color: green;
         color: white;
       }
+
       &.error {
         display: block;
         background-color: red;
         color: white;
       }
+
       &.loading {
         display: block;
         background-color: yellow;
         color: black;
       }
     }
+
     .toolbar {
       width: 100%;
       background-color: #ccc;
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
+
       button {
         padding: 0.5rem;
         margin: 0.5rem;
         border: 1px solid #ccc;
         cursor: pointer;
+
         &:hover {
           background-color: #ccc;
         }
@@ -273,14 +324,17 @@ const removeAccount = async (id: string) => {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
+
       .title {
         width: 100%;
         font-size: 2rem;
         font-weight: bold;
         padding: 0.5rem;
         border-bottom: 2px solid black;
+        border-top: 2px solid black;
         text-align: center;
       }
+
       .repository {
         display: flex;
         align-items: center;
@@ -289,13 +343,16 @@ const removeAccount = async (id: string) => {
         border: 1px solid black;
         font-size: 1.8rem;
         justify-content: space-between;
+
         label {
           margin-left: 0.5rem;
         }
+
         input {
           margin-right: 0.5rem;
         }
       }
+
       .account {
         width: 100%;
         display: flex;
@@ -305,21 +362,50 @@ const removeAccount = async (id: string) => {
         border-bottom: 1px solid black;
         font-size: 1.5rem;
         justify-content: space-between;
+
         img {
           width: 50px;
           height: 50px;
           border-radius: 50%;
           margin-right: 0.5rem;
         }
+
         button {
           margin: 0.5rem;
           padding: 0.5rem;
           border: 1px solid #ccc;
           cursor: pointer;
+
           &:hover {
             background-color: #ccc;
           }
         }
+      }
+
+      .skills {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        width: 100%;
+        border: 1px solid black;
+        font-size: 1.8rem;
+        justify-content: space-between;
+        flex-direction: column;
+
+        .skill_icons {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          align-items: center;
+          .skill_icon {
+            border: 0.3rem solid #c1c1c1;
+            cursor: pointer;
+            &:hover {
+              border: 0.3rem solid #000;
+            }
+          }
+        }
+
       }
     }
   }
@@ -333,7 +419,9 @@ const removeAccount = async (id: string) => {
 
     .menu {
       width: 100%;
-      max-width: 100%;
+      max-width: unset;
+      border: none;
+
       .menu__bar {
         display: block;
         right: 0;
@@ -342,24 +430,20 @@ const removeAccount = async (id: string) => {
         color: black;
         align-self: end;
       }
+
       span {
         &.active {
           display: block;
         }
 
         display: none;
-        width: 100%;
         text-align: center;
       }
     }
+
     .page {
       width: 100%;
       height: 100%;
-      .content {
-        .account {
-          justify-content: center;
-        }
-      }
     }
   }
 }

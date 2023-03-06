@@ -48,6 +48,8 @@ export default defineEventHandler(async (event) => {
 
     let res : AnyObj[] = [];
 
+    const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
     for (const account of accounts) {
 
         const repositories = await getRepositories(account.value.access_token);
@@ -55,7 +57,12 @@ export default defineEventHandler(async (event) => {
         if (repositories.code === 401 || repositories.message === "Bad credentials") {
             console.log("Refreshing token");
             await refreshToken(account.id);
-            const newAccount: Account | null = await github.get(account.id);
+            let newAccount: Account | null = await github.get(account.id);
+
+            while (newAccount && newAccount.access_token === account.value.access_token) {
+                await sleep(1000);
+                newAccount = await github.get(account.id);
+            }
             if (!newAccount) {
                 return {
                     success: false,

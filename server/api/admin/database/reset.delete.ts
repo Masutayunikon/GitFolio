@@ -10,6 +10,7 @@ export default defineEventHandler(async (event) => {
     const tables = [
         'tokens',
         'github',
+        'repositories',
     ];
 
     let res = 0;

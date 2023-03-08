@@ -30,7 +30,7 @@ const login = async () => {
   const router = useRouter();
 
   if (response.success) {
-    router.push({ path: '/admin'});
+    router.push({ path: '/admin/repositories'});
   }
 }
 </script>

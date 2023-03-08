@@ -17,7 +17,6 @@ export default defineEventHandler(async (event) => {
     const res = [];
 
     for (const account of accounts) {
-        console.log(account, await github.get(account.id));
         res.push({
             id: account.id,
             username: account.value.username,

@@ -3,8 +3,9 @@
     <div class="logo"/>
     <div class="nav-links" ref="nav_links">
       <ul>
-        <li @click="toggleIfActive"><nuxt-link to="/">Moi</nuxt-link></li>
-        <li @click="toggleIfActive"><nuxt-link to="/blog">Blog</nuxt-link></li>
+        <li  @click="toggleIfActive" v-for="link in menu" :key="link.name">
+          <nuxt-link :to="link.link">{{link.name}}</nuxt-link>
+        </li>
       </ul>
     </div>
     <Icon :name="icon" class="white button__menu" @click="toggleMenu"/>
@@ -13,7 +14,18 @@
 
 <script lang="ts" setup>
 
+interface Props {
+  menu: {
+    name: string;
+    link: string;
+  }[];
+}
+
+defineProps<Props>();
+
 import {Ref} from "@vue/reactivity";
+
+
 
 const nav_links: Ref = ref(null);
 

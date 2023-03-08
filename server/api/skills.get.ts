@@ -1,8 +1,6 @@
 import {QuickDB} from "quick.db";
 import * as querystring from "querystring";
 import config from "~/server/config.json";
-import {getBindingIdentifiers} from "@babel/types";
-import keys = getBindingIdentifiers.keys;
 
 
 const db = new QuickDB();

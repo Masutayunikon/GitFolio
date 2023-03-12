@@ -5,7 +5,7 @@
         <div class="skill" v-for="skill in skills">
           <span>{{skill.language}}</span>
           <div class="icons_container">
-            <Icon class="icon" :class="skillSet.value?.find((s : any) => s.id === skill)?.icon === icon ? 'active' : ''" v-for="icon in skill.icons" :name="icon" @click="setSkill($event, icon, skill.language)"></Icon>
+            <Icon class="icon" :class="getIconBySkill(skill.language) === icon ? 'active' : ''" v-for="icon in skill.icons" :name="icon" @click="setSkill($event, icon, skill.language)"></Icon>
           </div>
         </div>
       </div>
@@ -26,10 +26,13 @@ const getSkillSet = async () => {
   if (response.success) {
     skillSet.value = response.skills;
   }
+
+
+
 }
 
 const getIconBySkill = (skill : string) => {
-  return skillSet.value.find((s : any) => s.id === skill)?.icon;
+  return skillSet.value.find((s : any) => s.id === skill)?.value;
 }
 
 const getSkills = async () => {
@@ -81,9 +84,14 @@ const setSkill = async (event: PointerEvent, icon : string, language : string) =
 
 }
 
-onBeforeMount(() => {
-  getSkills();
-  getSkillSet();
+onBeforeMount(async () => {
+  await getSkills();
+  await getSkillSet();
+
+  for (let skill of skills.value) {
+    const icon = getIconBySkill(skill.language);
+    console.log(icon);
+  }
 })
 
 </script>

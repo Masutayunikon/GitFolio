@@ -1,40 +1,23 @@
 <template>
   <nuxt-layout name="portfolio">
     <div class="container">
-      <div class="container__profile">
+      <div class="container__profile"  v-for="account in accounts">
         <div class="wrapper_image">
-          <img src="/images/profile.jpg" alt="profile" class="profile__image">
+          <img :src="account.avatar" alt="profile" class="profile__image">
         </div>
         <div class="profile__description">
           <span class="name">Qui suis-je?</span>
-          <span class="description">Je suis actuellement en troisième année à Epitech, et mon objectif est de devenir un développeur fullstack. J'ai des compétences en développement web, avec une connaissance des langages de programmation populaires. </span>
+          <span class="description">{{account.description}}</span>
         </div>
       </div>
       <div class="container__skills">
         <UnderlineText class="title_skill" text="Compétences" line-color="green" line-height="0.3rem" text-color="white"/>
         <div class="container__icons">
-          <TextIcon spacing="1rem" name="logos:nuxt-icon" text="NuxtJS" :after="true"/>
-          <TextIcon spacing="1rem" name="vscode-icons:file-type-js-official" text="Javascript" :after="true"/>
-          <TextIcon spacing="1rem" name="vscode-icons:file-type-vue" text="VueJS" :after="true"/>
-          <TextIcon spacing="1rem" name="logos:nodejs" text="NodeJS" :after="true"/>
-          <TextIcon spacing="1rem" name="vscode-icons:file-type-php2" text="PHP" :after="true"/>
-          <TextIcon spacing="1rem" name="vscode-icons:file-type-html" text="HTML5" :after="true"/>
-          <TextIcon spacing="1rem" name="vscode-icons:file-type-css" text="CSS3" :after="true"/>
-          <TextIcon spacing="1rem" name="vscode-icons:file-type-scss2" text="SCSS" :after="true"/>
-          <TextIcon spacing="1rem" name="vscode-icons:file-type-c" text="C" :after="true"/>
-          <TextIcon spacing="1rem" name="vscode-icons:file-type-cpp3" text="C++" :after="true"/>
-          <TextIcon style="fill: white" spacing="1rem" name="logos:github-octocat" text="Github" :after="true"/>
-          <TextIcon spacing="1rem" name="logos:gitlab" text="Gitlab" :after="true"/>
-        </div>
-        <UnderlineText class="title_skill"  line-height="0.3rem" line-color="blue" text="En cours d'apprentissage" text-color="white" />
-        <div class="container__icons">
-          <TextIcon spacing="1rem" name="logos:blender" text="Blender" :after="true"/>
-          <TextIcon spacing="1rem" name="vscode-icons:file-type-typescript-official" text="Typescript" :after="true"/>
-          <TextIcon style="fill: white" spacing="1rem" name="logos:threejs" text="ThreeJS" :after="true"/>
+          <TextIcon v-for="skill in skillSet" spacing="1rem" :name="skill.value" :text="skill.id" :after="true"/>
         </div>
         <UnderlineText class="title_skill" line-height="0.3rem" line-color="orange" text="Projects" text-color="white" />
         <div  class="container__icons container__projects">
-          <GithubProject class="project" v-for="project in repositories" :name="project.name" :description="project.description" :language="project.language" :updated_at="project.updated_at" :html_url="project.html_url"/>
+          <GithubProject class="project" v-for="project in repositories" :name="project.value.repository.name" :description="project.value.repository.description" :language="project.value.repository.language" :updated_at="project.value.repository.updated_at" :html_url="project.value.repository.html_url"/>
         </div>
         <UnderlineText line-height="0.3rem" line-color="red" text="Contacts" text-color="white" />
         <div class="container__icons">
@@ -69,26 +52,76 @@ useHead({
   ],
 })
 
-const repositories = await fetch('https://api.github.com/users/Masutayunikon/repos', {
-  method: 'GET',
-  headers: {
-    'Content-Type': 'application/json',
-    'Accept': 'application/vnd.github.v3+json'
+const skillSet : Ref = ref([]);
+const repositories : Ref = ref([]);
+
+const getSkillSet = async () => {
+  const response = await $fetch('/api/github/skills/all', {
+    method: 'GET'
+  });
+
+  if (response.success) {
+    skillSet.value = response.skills;
   }
-}).then(res => res.json()).then(data => {
 
-  type GitHubObject = {
-    [key: string]: any; // allow any additional properties with any value type
-    updated_at: string;
-    name: string;
-  };
+  console.log(skillSet.value);
+}
 
-  return data.sort((a : GitHubObject, b : GitHubObject) => {
-    const dateA = new Date(a.updated_at);
-    const dateB = new Date(b.updated_at);
-    return dateB.getTime() - dateA.getTime();
-  }).filter((obj : GitHubObject) => obj.name !== "Masutayunikon");
-});
+const accounts : Ref = ref([]);
+
+const getAccounts = async () => {
+  const response = await $fetch('/api/github/accounts', {
+    method: 'GET'
+  });
+
+  if (response.success) {
+    accounts.value = response.accounts;
+  }
+}
+
+onBeforeMount(() => {
+  getSkillSet();
+  getRepositories();
+  getAccounts();
+})
+
+const getRepositories = () => {
+  $fetch('/api/github/repositories', {
+    method: 'GET'
+  }).then((response) => {
+    if (response.success) {
+
+
+      if (response.repositories ) {
+        type GitHubObject = {
+          id: string;
+          value: {
+            display: string;
+            repository: {
+              [key: string]: any; // allow any additional properties with any value type
+              updated_at: string;
+              name: string;
+            };
+          }
+        };
+
+        let repos : GitHubObject[]  = response.repositories;
+
+        // remove if display is false
+        repos = repos.filter((repo: GitHubObject) => {
+          return repo.value.display;
+        });
+
+        repos.sort((a: GitHubObject, b: GitHubObject) => {
+          return new Date(b.value.repository.updated_at).getTime() - new Date(a.value.repository.updated_at).getTime();
+        });
+
+        repositories.value = repos;
+      }
+
+    }
+  })
+}
 
 </script>
 

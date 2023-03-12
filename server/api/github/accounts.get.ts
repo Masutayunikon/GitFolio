@@ -20,7 +20,8 @@ export default defineEventHandler(async (event) => {
         res.push({
             id: account.id,
             username: account.value.username,
-            avatar: account.value.avatar
+            avatar: account.value.avatar,
+            description: account.value.description,
         })
     }
 

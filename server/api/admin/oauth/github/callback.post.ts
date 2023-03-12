@@ -40,6 +40,7 @@ export default defineEventHandler(async (event) => {
     await github.set(userData.id.toString(), {
         username: userData.login,
         avatar: userData.avatar_url,
+        description: userData.bio,
         access_token: oauthData.access_token,
         refresh_token: oauthData.refresh_token,
         expires: oauthData.expires_in,

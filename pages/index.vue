@@ -17,7 +17,9 @@
         </div>
         <UnderlineText class="title_skill" line-height="0.3rem" line-color="orange" text="Projects" text-color="white" />
         <div  class="container__icons container__projects">
-          <GithubProject class="project" v-for="project in repositories" :name="project.value.repository.name" :description="project.value.repository.description" :language="project.value.repository.language" :updated_at="project.value.repository.updated_at" :html_url="project.value.repository.html_url"/>
+          <ProjectsCardThree class="project" v-for="project in repositories" :name="project.value.repository.name" :description="project.value.repository.description" :language="project.value.repository.language" :updated_at="project.value.repository.updated_at" :html_url="project.value.repository.html_url"/>
+          <ProjectsCardOne class="project" v-for="project in repositories" :name="project.value.repository.name" :description="project.value.repository.description" :language="project.value.repository.language" :updated_at="project.value.repository.updated_at" :html_url="project.value.repository.html_url"/>
+          <ProjectsCardTwo class="project" v-for="project in repositories" :name="project.value.repository.name" :description="project.value.repository.description" :language="project.value.repository.language" :updated_at="project.value.repository.updated_at" :html_url="project.value.repository.html_url"/>
         </div>
       </div>
     </div>
@@ -44,6 +46,29 @@ useHead({
     }
   ],
 })
+
+const config = {
+  backgroundColor: 'transparent',
+  project : {
+    backgroundColor: 'white',
+    color: 'black',
+    borderRadius: '1rem',
+    border: true,
+  },
+  icon: {
+    color: 'black',
+    icon_position: 'left',
+  },
+  description: {
+    color: 'black',
+  },
+  profile: {
+    backgroundColor: 'white',
+    image: {
+      borderRadius: '50%',
+    },
+  },
+}
 
 const skillSet : Ref = ref([]);
 const repositories : Ref = ref([]);

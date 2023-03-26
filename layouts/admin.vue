@@ -25,8 +25,8 @@ const menu = ref([
     link: '/admin/contacts',
   },
   {
-    name: 'Settings',
-    link: '/admin/settings',
+    name: 'CMS',
+    link: '/admin/cms',
   }
 ])
 

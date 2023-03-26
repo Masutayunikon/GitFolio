@@ -11,10 +11,6 @@ const menu = ref([
   {
     name: "Moi",
     link: "/",
-  },
-  {
-    name: "Blog",
-    link: "/blog",
   }
 ]);
 

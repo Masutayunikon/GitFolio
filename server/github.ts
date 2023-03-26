@@ -55,6 +55,8 @@ export async function refreshToken(id: string) {
         }
     }
 
+    const token = account.access_token;
+
     await github.set(id, {
         username: account.username,
         avatar: account.avatar,
@@ -65,6 +67,14 @@ export async function refreshToken(id: string) {
         token_type: refreshData.token_type,
         last_updated: Date.now(),
     });
+
+    let tmp : Account | null = await github.get(id);
+
+    while (tmp && tmp.access_token === token) {
+        tmp = await github.get(id);
+        console.log("Waiting for token to update...");
+        await new Promise(resolve => setTimeout(resolve, 1000));
+    }
 
     return {
         success: true

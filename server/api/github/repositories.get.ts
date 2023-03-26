@@ -59,17 +59,19 @@ export default defineEventHandler(async (event) => {
             await refreshToken(account.id);
             let newAccount: Account | null = await github.get(account.id);
 
-            while (newAccount && newAccount.access_token === account.value.access_token) {
-                await sleep(1000);
-                newAccount = await github.get(account.id);
-            }
             if (!newAccount) {
                 return {
                     success: false,
                     error: "Account not found"
                 }
             }
-            const newRepositories = await getRepositories(newAccount.access_token);
+            let newRepositories;
+
+            do {
+                newRepositories = await getRepositories(newAccount.access_token);
+                await sleep(1000);
+                newAccount = await github.get(account.id);
+            } while (newRepositories.code === 401 || newRepositories.message === "Bad credentials")
 
             if (newRepositories.error) {
                 return {

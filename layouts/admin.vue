@@ -19,6 +19,14 @@ const menu = ref([
   {
     name: 'Skills',
     link: '/admin/skills',
+  },
+  {
+    name: 'Contacts',
+    link: '/admin/contacts',
+  },
+  {
+    name: 'Settings',
+    link: '/admin/settings',
   }
 ])
 

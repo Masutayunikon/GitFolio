@@ -5,7 +5,8 @@
         <span class="back_home">this page is reserved to admins, if you are lost go back to the <nuxt-link to="/">home</nuxt-link> </span>
         <div class="form">
           <input v-model="username" placeholder="username"/>
-          <input v-model="password" placeholder="password"/>
+          <input type="password
+" v-model="password" placeholder="password"/>
           <button @click="login">login</button>
         </div>
       </div>
